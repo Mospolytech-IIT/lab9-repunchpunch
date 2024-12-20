@@ -1,0 +1,7 @@
+<h1>Список пользователей</h1>
+<ul>
+    {% for user in Users %}
+    <li>{{ user.username }} | {{ user.email }} | <a href="/users/edit/{{ user.id }}">Редактировать</a></li>
+    {% endfor %}
+</ul>
+<a href="/users/create">Создать нового пользователя</a>
