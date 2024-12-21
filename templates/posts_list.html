@@ -1,8 +1,16 @@
 <h1>Список постов</h1>
 <ul>
     {% for post in posts %}
-    <li>{{ post.title }} | {{ post.content }} | <a href="/posts/edit/{{ post.id }}">Редактировать</a></li>
+    <li>
+        {{ post.title }} | {{ post.content }}
+        <span style="margin-left: 10px;">
+            <a href="/posts/edit/{{ post.id }}">Редактировать</a>
+            <form action="/posts/delete/{{ post.id }}" method="POST" style="display:inline">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit" onclick="return confirm('Вы уверены?')">Удалить</button>
+            </form>
+        </span>
+    </li>
     {% endfor %}
 </ul>
 <a href="/posts/create">Создать новый пост</a>
-

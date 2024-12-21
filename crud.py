@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from models import User, Post
 
@@ -28,6 +29,26 @@ def create_post(db: Session, title: str, content: str, user_id: int):
 # Функция для получения всех постов
 def get_posts(db: Session):
     return db.query(Post).all()
+
+#Функция для удаления одного поста
+def delete_post(db: Session, post_id: int):
+    db_post = db.query(Post).filter(Post.id == post_id).first()
+    if db_post:
+        db.delete(db_post)
+        db.commit()
+    else:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+#Функция для удаления пользователя и всех его постов
+def delete_user_with_posts(db: Session, user_id: int):
+    db.query(Post).filter(Post.user_id == user_id).delete()
+    
+    db_user = db.query(User).filter(User.id == user_id).first()
+    if db_user:
+        db.delete(db_user)
+        db.commit()
+    else:
+        raise HTTPException(status_code=404, detail="User not found")
 
 # Функция для получения постов конкретного пользователя
 def get_users_post(db: Session, user_id: int):

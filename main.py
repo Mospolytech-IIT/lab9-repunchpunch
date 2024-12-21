@@ -84,5 +84,23 @@ def edit_post(post_id: int, title: str = Form(...), content: str = Form(...), db
         raise HTTPException(status_code=404, detail="Post not found")
     return RedirectResponse(url="/posts", status_code=303)
 
+@app.delete("/posts/delete/{post_id}")
+def delete_post(post_id: int, db: Session = Depends(get_db)):
+    post = crud.get_post_by_id(db, post_id)
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    
+    crud.delete_post(db, post_id)
+    return {"message": "Post deleted successfully"}
+
+@app.delete("/users/delete/{user_id}")
+def delete_user_with_posts(user_id: int, db: Session = Depends(get_db)):
+    user = crud.get_user_by_id(db, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    crud.delete_user_with_posts(db, user_id)
+    return {"message": "User and all associated posts deleted successfully"}
+
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
