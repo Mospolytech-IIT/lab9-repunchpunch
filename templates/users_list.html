@@ -1,0 +1,16 @@
+<h1>Список пользователей</h1>
+<ul>
+    {% for user in Users %}
+    <li>
+        {{ user.username }} | {{ user.email }}
+        <span style="margin-left: 10px;">
+            <a href="/users/edit/{{ user.id }}">Редактировать</a>
+            <form action="/users/delete/{{ user.id }}" method="POST" style="display:inline">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit" onclick="return confirm('Вы уверены?')">Удалить</button>
+            </form>
+        </span>
+    </li>
+    {% endfor %}
+</ul>
+<a href="/users/create">Создать нового пользователя</a>
